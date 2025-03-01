@@ -19,4 +19,6 @@
 #
 class Item < ApplicationRecord
   belongs_to :company
+
+  validates :name, :vat, presence: true
 end

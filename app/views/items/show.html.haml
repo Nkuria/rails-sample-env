@@ -1,15 +1,22 @@
-%p#notice= notice
+.row.justify-content-center.mt-5
+  .col-md-6.col-lg-5
+    - if notice
+      .alert.alert-success= notice
 
-%p
-  %b Name:
-  = @item.name
-%p
-  %b Vat:
-  = @item.vat
-%p
-  %b Company:
-  = @item.company
+    .card.shadow-sm.rounded-3
+      .card-body.p-4
+        %h5.card-title.text-center.mb-3 Item Details
 
-= link_to 'Edit', edit_item_path(@item)
-\|
-= link_to 'Back', items_path
+        %p.mb-2
+          %b Name:
+          = @item.name
+        %p.mb-2
+          %b Vat:
+          = @item.vat
+        %p.mb-2
+          %b Company:
+          = @item.company.name
+
+        .d-flex.justify-content-center.mt-3.gap-2
+          = link_to 'Edit', edit_item_path(@item), class: 'btn btn-primary btn-sm'
+          = link_to 'Back', items_path, class: 'btn btn-outline-secondary btn-sm'

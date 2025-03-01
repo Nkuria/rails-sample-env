@@ -1,5 +1,6 @@
-%h1 New item
-
-= render 'form'
-
-= link_to 'Back', items_path
+.row.justify-content-center
+  .col-md-6.col-lg-5
+    %h1.text-center.fw-bold.mb-4.text-primary New Item
+    = render 'form'
+    .text-center.mt-3
+      = link_to 'Back', items_path, class: 'btn btn-outline-secondary btn-sm'

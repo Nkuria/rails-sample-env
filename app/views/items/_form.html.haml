@@ -1,19 +1,28 @@
-= form_for @item do |f|
-  - if @item.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@item.errors.count, "error")} prohibited this item from being saved:"
-      %ul
-        - @item.errors.full_messages.each do |message|
-          %li= message
+.row.justify-content-center.mt-5
+  .col-md-8.col-lg-6
+    .card.shadow-sm.rounded-3
+      .card-body.p-4
+        %h5.card-title.text-center.mb-3 Add New Item
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :vat
-    = f.text_field :vat
-  .field
-    = f.label :company
-    = f.text_field :company
-  .actions
-    = f.submit 'Save'
+        = form_for @item, html: { class: 'needs-validation', novalidate: true } do |f|
+          - if @item.errors.any?
+            .alert.alert-danger
+              %h6= "#{pluralize(@item.errors.count, 'error')} prevented this item from being saved:"
+              %ul.mb-0
+                - @item.errors.full_messages.each do |message|
+                  %li= message
+
+          .mb-3
+            = f.label :name, class: 'form-label fw-semibold'
+            = f.text_field :name, class: 'form-control form-control-sm', required: true
+
+          .mb-3
+            = f.label :vat, class: 'form-label fw-semibold'
+            = f.text_field :vat, class: 'form-control form-control-sm', required: true
+
+          .mb-3
+            = f.label :company, class: 'form-label fw-semibold'
+            = f.collection_select :company_id, Company.all, :id, :name, { prompt: 'Select a company' }, class: 'form-select form-select-sm'
+
+          .d-flex.justify-content-end.mt-3
+            = f.submit 'Save', class: 'btn btn-primary btn-sm px-4'
