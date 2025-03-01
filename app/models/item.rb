@@ -19,6 +19,7 @@
 #
 class Item < ApplicationRecord
   belongs_to :company
+  has_many :deals, dependent: :destroy
 
   validates :name, :vat, presence: true
 end
