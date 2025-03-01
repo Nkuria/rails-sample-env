@@ -1,10 +1,13 @@
 class TransactionsController < ApplicationController
+  include Pagy::Backend
   before_action :set_transaction, only: %i[ show edit update destroy ]
 
   # GET /transactions or /transactions.json
   def index
-    @transactions = Transaction.all
+    @q = Transaction.ransack(params[:q])
+    @pagy, @transactions = pagy(@q.result.includes(:customer, :user))
   end
+
 
   # GET /transactions/1 or /transactions/1.json
   def show

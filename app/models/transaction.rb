@@ -28,4 +28,8 @@ class Transaction < ApplicationRecord
   monetize :amount_cents, as: :amount
 
   accepts_nested_attributes_for :deals, allow_destroy: true
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["amount_cents", "amount_currency", "created_at", "customer_id", "id", "updated_at", "user_id"]
+  end
 end
