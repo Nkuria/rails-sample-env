@@ -44,6 +44,9 @@ gem 'concurrent-ruby', '1.3.4'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+
+  gem 'factory_bot_rails'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -63,9 +66,6 @@ group :development do
   gem 'rubocop', require: false
   gem 'rubocop-minitest', require: false
   gem 'rubocop-rails', require: false
-
-  gem 'factory_bot_rails'
-  gem 'rspec-rails'
 end
 
 group :test do
@@ -86,3 +86,6 @@ gem 'jwt'
 gem 'bootstrap', '~> 5.0'
 
 gem "sassc-rails", "~> 2.1"
+
+gem 'money-rails', '~> 1.12'
+gem "jquery-rails", "~> 4.6"

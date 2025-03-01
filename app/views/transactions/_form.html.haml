@@ -1,0 +1,33 @@
+= form_for @transaction do |f|
+  - if @transaction.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@transaction.errors.count, "error")} prohibited this transaction from being saved:"
+      %ul
+        - @transaction.errors.full_messages.each do |message|
+          %li= message
+
+  .mb-3
+    = f.label :user, class: "form-label"
+    = f.collection_select :user_id, User.all, :id, :name, { prompt: 'Select a user' }, class: 'form-select form-select-sm'
+
+  .mb-3
+    = f.label :customer, class: "form-label"
+    = f.collection_select :customer_id, Customer.all, :id, :name, { prompt: 'Select a customer' }, class: 'form-select form-select-sm'
+
+  .mb-3
+    = f.label :amount, class: "form-label"
+    = f.number_field :amount, class: "form-control"
+
+  %h5.mt-4 Deals
+  #deals-fields
+  - @transaction.deals.each do |deal|
+    = f.fields_for :deals, deal do |deal_form|
+      = render "deals/form", f: deal_form 
+
+  .mt-2
+    = link_to "Add Deal", "#", class: "btn btn-primary add-deal", data: { fields: f.fields_for(:deals, Deal.new, child_index: "new_deal") { |deal_form| render "deals/form", f: deal_form } }
+
+  .mt-4
+    = f.submit "Save", class: "btn btn-success"
+
+= javascript_include_tag 'transactions', defer: true

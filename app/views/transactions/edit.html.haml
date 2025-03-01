@@ -1,0 +1,10 @@
+.container.mt-4
+  .card.shadow-lg.p-4
+    %h1.text-primary.mb-4 Editing Transaction
+
+    = render 'form'
+
+    .mt-3
+      = link_to 'Show', @transaction, class: 'btn btn-outline-primary'
+      \|
+      = link_to 'Back', transactions_path, class: 'btn btn-secondary'

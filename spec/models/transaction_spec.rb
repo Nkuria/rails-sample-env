@@ -2,13 +2,13 @@
 #
 # Table name: transactions
 #
-#  id             :integer          not null, primary key
-#  price_cents    :integer          default(0), not null
-#  price_currency :string           default("KES"), not null
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  customer_id    :integer          not null
-#  user_id        :integer          not null
+#  id              :integer          not null, primary key
+#  amount_cents    :integer          default(0), not null
+#  amount_currency :string           default("KES"), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  customer_id     :integer          not null
+#  user_id         :integer          not null
 #
 # Indexes
 #

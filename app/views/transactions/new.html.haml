@@ -1,0 +1,10 @@
+.row.justify-content-center.mt-4
+  .col-md-12.col-lg-10
+    .card.shadow-sm.rounded-3
+      .card-body.p-5
+        %h5.card-title.text-center.mb-4 New Transaction
+
+        = render 'form'
+
+    .mt-3.text-center
+      = link_to 'Back', transactions_path, class: 'btn btn-outline-secondary btn-sm'
