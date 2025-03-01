@@ -1,0 +1,6 @@
+.deal-item.d-flex.gap-3.align-items-center.mb-2
+  = f.hidden_field :id  
+  = f.text_field :price, class: "form-control", placeholder: "Price"
+  = f.number_field :quantity, class: "form-control", placeholder: "Quantity"
+  = f.collection_select :item_id, Item.all, :id, :name, { prompt: 'Select an item' }, class: 'form-select form-select-sm',  placeholder: "Item"
+  = link_to "Remove", "#", class: "btn btn-danger remove-deal"
