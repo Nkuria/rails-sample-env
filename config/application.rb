@@ -20,11 +20,6 @@ module RailsGraphqlSample
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-  
-    # Disable haml for new views
-    config.generators do |g|
-      g.template_engine :erb
-    end
 
     # use rspec as default
     config.generators do |g|
