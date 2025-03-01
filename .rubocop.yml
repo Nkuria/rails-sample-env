@@ -1,0 +1,57 @@
+require:
+  - rubocop-minitest
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - "db/schema.rb"
+    - "bin/bundle"
+    - "bin/**/*"
+    - "config/**/*"
+    - "lib/tasks/auto_annotate_models.rake"
+    - "migrate/**/*"
+  SuggestExtensions: false
+
+Lint/EmptyFile:
+  Enabled: false
+
+Lint/NonDeterministicRequireOrder:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - migrate/**/*
+    - routes/*
+    - Rakefile
+    - test/factories/*
+
+Metrics/MethodLength:
+  Max: 20
+  Exclude:
+    - test/**/*
+    - migrate/**/*
+
+Metrics/AbcSize:
+  Exclude:
+    - test/**/*
+    - "migrate/**/*"
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Style/FrozenStringLiteralComment: 
+  Exclude:
+    - migrate/**/*
