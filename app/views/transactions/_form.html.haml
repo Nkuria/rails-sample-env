@@ -20,8 +20,9 @@
 
   %h5.mt-4 Deals
   #deals-fields
-    - f.fields_for :deals do |deal_form|
-      = render "deals/form", f: deal_form  
+  - @transaction.deals.each do |deal|
+    = f.fields_for :deals, deal do |deal_form|
+      = render "deals/form", f: deal_form 
 
   .mt-2
     = link_to "Add Deal", "#", class: "btn btn-primary add-deal", data: { fields: f.fields_for(:deals, Deal.new, child_index: "new_deal") { |deal_form| render "deals/form", f: deal_form } }
