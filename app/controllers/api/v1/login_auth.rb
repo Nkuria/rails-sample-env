@@ -8,7 +8,7 @@ module Api::V1::LoginAuth
   end
 
   def extract_token
-    request.headers["Authorization"]&.split&.last
+    request.headers['Authorization']&.split&.last
   end
 
   def decode_jwt(token)

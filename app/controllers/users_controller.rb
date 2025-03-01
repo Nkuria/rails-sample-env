@@ -1,18 +1,17 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy otp verify_totp ]
+  before_action :set_user, only: %i[show edit update destroy otp verify_totp]
 
   # GET /users or /users.json
   def index
     @users = if current_company
-      current_company.users.all
-    else
-      User.all
-    end
+               current_company.users.all
+             else
+               User.all
+             end
   end
 
   # GET /users/1 or /users/1.json
-  def show
-  end
+  def show; end
 
   # GET /users/new
   def new
@@ -31,7 +30,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to users_url, notice: "User was successfully created." }
+        format.html { redirect_to users_url, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -44,7 +43,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to users_url, notice: "User was successfully updated." }
+        format.html { redirect_to users_url, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -58,36 +57,37 @@ class UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to users_url, notice: "User was successfully destroyed." }
+      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def otp
-    @rotp = ROTP::TOTP.new(@user.otp_secret, issuer: "SENRI Ltd.")
-    uri = @rotp.provisioning_uri("nori.setalab@google.com")
+    @rotp = ROTP::TOTP.new(@user.otp_secret, issuer: 'SENRI Ltd.')
+    uri = @rotp.provisioning_uri('nori.setalab@google.com')
     @qrcode = RQRCode::QRCode.new(uri).as_svg(
       viewbox: true
     )
   end
 
   def verify_totp
-    @rotp = ROTP::TOTP.new(@user.otp_secret, issuer: "SENRI Ltd.")
+    @rotp = ROTP::TOTP.new(@user.otp_secret, issuer: 'SENRI Ltd.')
     @message = if @rotp.now == params.dig(:user, :totp)
-      "OTP verified."
-    else
-      "Failed to verify"
-    end
+                 'OTP verified.'
+               else
+                 'Failed to verify'
+               end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def user_params
-      params.fetch(:user, {}).permit(:company_id, :name, :api_key, :api_secret, :otp_secret)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def user_params
+    params.fetch(:user, {}).permit(:company_id, :name, :api_key, :api_secret, :otp_secret)
+  end
 end

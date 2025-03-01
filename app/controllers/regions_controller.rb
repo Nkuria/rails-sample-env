@@ -1,19 +1,18 @@
 class RegionsController < ApplicationController
-  before_action :set_region, only: %i[ show edit update destroy ]
+  before_action :set_region, only: %i[show edit update destroy]
 
   # GET /regions or /regions.json
   def index
-     @regions = if current_company
-      current_company.regions.all
-    else
-      Region.all
-    end
+    @regions = if current_company
+                 current_company.regions.all
+               else
+                 Region.all
+               end
     @regions = @regions.includes(:company, :parent)
   end
 
   # GET /regions/1 or /regions/1.json
-  def show
-  end
+  def show; end
 
   # GET /regions/new
   def new
@@ -21,8 +20,7 @@ class RegionsController < ApplicationController
   end
 
   # GET /regions/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /regions or /regions.json
   def create
@@ -30,7 +28,7 @@ class RegionsController < ApplicationController
 
     respond_to do |format|
       if @region.save
-        format.html { redirect_to regions_url, notice: "Region was successfully created." }
+        format.html { redirect_to regions_url, notice: 'Region was successfully created.' }
         format.json { render :show, status: :created, location: @region }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -43,7 +41,7 @@ class RegionsController < ApplicationController
   def update
     respond_to do |format|
       if @region.update(region_params)
-        format.html { redirect_to regions_url, notice: "Region was successfully updated." }
+        format.html { redirect_to regions_url, notice: 'Region was successfully updated.' }
         format.json { render :show, status: :ok, location: @region }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -57,19 +55,20 @@ class RegionsController < ApplicationController
     @region.destroy
 
     respond_to do |format|
-      format.html { redirect_to regions_url, notice: "Region was successfully destroyed." }
+      format.html { redirect_to regions_url, notice: 'Region was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_region
-      @region = Region.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def region_params
-      params.fetch(:region, {}).permit(:company_id, :name, :parent_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_region
+    @region = Region.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def region_params
+    params.fetch(:region, {}).permit(:company_id, :name, :parent_id)
+  end
 end

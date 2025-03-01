@@ -1,1 +1,1 @@
-json.array! @surveys, partial: "surveys/survey", as: :survey
+json.array! @surveys, partial: 'surveys/survey', as: :survey

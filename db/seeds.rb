@@ -75,7 +75,7 @@ end
 def create_regions(company:, number: 10)
   (number - company.regions.count).times do
     region = company.regions.create(
-      name: Faker::Address.city,
+      name: Faker::Address.city
     )
     region.update(parent_id: company.regions.where(parent_id: nil).where.not(id: nil).sample) if rand > 0.3
   end

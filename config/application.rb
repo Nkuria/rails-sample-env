@@ -25,5 +25,10 @@ module RailsGraphqlSample
     config.generators do |g|
       g.template_engine :erb
     end
+
+    # use rspec as default
+    config.generators do |g|
+      g.test_framework :rspec
+    end
   end
 end

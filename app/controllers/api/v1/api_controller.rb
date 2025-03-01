@@ -9,7 +9,6 @@ class Api::V1::ApiController < ApplicationController
   rescue_from Unauthorized, with: :render_401
   rescue_from Forbidden, with: :render_403
 
-
   include Api::V1::LoginAuth
 
   protect_from_forgery with: :null_session
@@ -18,33 +17,33 @@ class Api::V1::ApiController < ApplicationController
   after_action :create_api_request_log
 
   def login_auth_token
-    begin
-      token = extract_token
-      raise Unauthorized.new('login required') unless token
-      @user_id = decode_jwt(token)[0]['data']['user']['id']
-    rescue JWT::VerificationError => e
-      logger.error e.message
-      render json: { status: 401, message: e.message }, status: :unauthorized
-    rescue JWT::ExpiredSignature => e
-      logger.error e.message
-      render json: { status: 401, message: e.message }, status: :unauthorized
-    end
+    token = extract_token
+    raise Unauthorized.new('login required') unless token
+
+    @user_id = decode_jwt(token)[0]['data']['user']['id']
+  rescue JWT::VerificationError => e
+    logger.error e.message
+    render json: { status: 401, message: e.message }, status: :unauthorized
+  rescue JWT::ExpiredSignature => e
+    logger.error e.message
+    render json: { status: 401, message: e.message }, status: :unauthorized
   end
 
   private
+
   def check_api_rate_limit
-    if current_company.api_request_logs.where(created_at: Time.zone.now.all_day).count > 1000  # current_company.daily_request_limit_api
+    if current_company.api_request_logs.where(created_at: Time.zone.now.all_day).count > 1000 # current_company.daily_request_limit_api
       @limit_status = 'daily limit exceeded'
       render json: { status: 429, message: 'API request limit exceeded' }, status: :too_many_requests
       create_api_request_log
       return
     end
     result = buckets_status
-    unless result.dig(:status)
-      @limit_status = result&.dig(:description)
-      render json: { status: 429, message: 'API request limit exceeded' }, status: :too_many_requests
-      create_api_request_log
-    end
+    return if result.dig(:status)
+
+    @limit_status = result&.dig(:description)
+    render json: { status: 429, message: 'API request limit exceeded' }, status: :too_many_requests
+    create_api_request_log
   end
 
   def buckets_status(current_time: Time.zone.now)
@@ -58,7 +57,7 @@ class Api::V1::ApiController < ApplicationController
           next
         end
 
-        if (current_time + gcra_setting.max_process_time > gcra_setting.tat)
+        if current_time + gcra_setting.max_process_time > gcra_setting.tat
           gcra_setting.update(tat: gcra_setting.tat + gcra_setting.emission_interval)
         else
           success = false
@@ -109,5 +108,4 @@ class Api::V1::ApiController < ApplicationController
   def render_404(exception = nil)
     render json: { status: 404, message: exception.message }, status: :not_found
   end
-
 end
