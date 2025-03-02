@@ -6,6 +6,11 @@ class TransactionsController < ApplicationController
   def index
     @q = Transaction.ransack(params[:q])
     @pagy, @transactions = pagy(@q.result.includes(:customer, :user))
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data TransactionsCsvService.generate(@transactions), filename: "transactions-#{Date.today}.csv" }
+    end
   end
 
 
