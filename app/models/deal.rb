@@ -22,7 +22,7 @@
 #  transaction_id  (transaction_id => transactions.id)
 #
 class Deal < ApplicationRecord
-  # belongs_to :txn, class_name: "Transaction", foreign_key: "transaction_id"
+  belongs_to :txn, class_name: "Transaction", foreign_key: "transaction_id"
   belongs_to :item
 
   monetize :price_cents, as: :price
