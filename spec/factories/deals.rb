@@ -25,7 +25,7 @@ FactoryBot.define do
   factory :deal do
     txn factory: :transaction
     item
-    price { Faker::Number.between(from: 1, to: 10000) }
+    price { Faker::Number.between(from: 1, to: 10_000) }
     quantity { Faker::Number.between(from: 1, to: 30) }
   end
 end

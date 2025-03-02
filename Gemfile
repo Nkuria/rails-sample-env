@@ -84,11 +84,11 @@ gem 'jwt'
 
 gem 'bootstrap', '~> 5.0'
 
-gem "sassc-rails", "~> 2.1"
+gem 'sassc-rails', '~> 2.1'
 
+gem 'jquery-rails', '~> 4.6'
 gem 'money-rails', '~> 1.12'
-gem "jquery-rails", "~> 4.6"
 
-gem 'ransack'
-gem 'pagy'
 gem 'faker'
+gem 'pagy'
+gem 'ransack'

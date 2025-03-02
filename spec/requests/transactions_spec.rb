@@ -12,48 +12,47 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-
-RSpec.describe "/transactions", type: :request do
+RSpec.describe '/transactions', type: :request do
   let(:user) { create(:user) }
   let(:customer) { create(:customer) }
   let(:transaction) { create(:transaction, user: user, customer: customer) }
 
-  describe "GET /index" do
-    it "renders the index page successfully" do
+  describe 'GET /index' do
+    it 'renders the index page successfully' do
       get transactions_path
       expect(response).to have_http_status(:ok)
     end
 
-    it "renders CSV format" do
+    it 'renders CSV format' do
       get transactions_path(format: :csv)
       expect(response).to have_http_status(:ok)
       expect(response.headers['Content-Type']).to include('text/csv')
     end
   end
 
-  describe "GET /show" do
-    it "renders the show page successfully" do
+  describe 'GET /show' do
+    it 'renders the show page successfully' do
       get transaction_path(transaction)
       expect(response).to have_http_status(:ok)
     end
   end
 
-  describe "GET /new" do
-    it "renders the new page successfully" do
+  describe 'GET /new' do
+    it 'renders the new page successfully' do
       get new_transaction_path
       expect(response).to have_http_status(:ok)
     end
   end
 
-  describe "GET /edit" do
-    it "renders the edit page successfully" do
+  describe 'GET /edit' do
+    it 'renders the edit page successfully' do
       get edit_transaction_path(transaction)
       expect(response).to have_http_status(:ok)
     end
   end
 
-  describe "POST /create" do
-    context "with valid parameters" do
+  describe 'POST /create' do
+    context 'with valid parameters' do
       let(:valid_params) do
         {
           transaction: {
@@ -65,61 +64,68 @@ RSpec.describe "/transactions", type: :request do
           }
         }
       end
+      it "creates a new transaction and redirects" do
+        expect {
+          post transactions_path, params: valid_params
+        }.to change(Transaction, :count).by(1)
+
+        expect(response).to redirect_to(transaction_path(Transaction.last))
+        follow_redirect!
+      end
     end
 
-    context "with invalid parameters" do
+    context 'with invalid parameters' do
       let(:invalid_params) { { transaction: { user_id: nil, customer_id: nil } } }
 
-      it "does not create a transaction and renders new template" do
-        expect {
+      it 'does not create a transaction and renders new template' do
+        expect do
           post transactions_path, params: invalid_params
-        }.not_to change(Transaction, :count)
+        end.not_to change(Transaction, :count)
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to include("prohibited this transaction from being saved")
+        expect(response.body).to include('prohibited this transaction from being saved')
       end
     end
   end
 
-  describe "PATCH /update" do
-    context "with valid parameters" do
+  describe 'PATCH /update' do
+    context 'with valid parameters' do
       let(:update_params) { { transaction: { customer_id: create(:customer).id } } }
 
-      it "updates the transaction and redirects" do
+      it 'updates the transaction and redirects' do
         patch transaction_path(transaction), params: update_params
         expect(response).to redirect_to(transaction_path(transaction))
         follow_redirect!
       end
     end
 
-    context "with invalid parameters" do
+    context 'with invalid parameters' do
       let(:invalid_update_params) { { transaction: { customer_id: nil } } }
 
-      it "does not update the transaction and renders edit template" do
+      it 'does not update the transaction and renders edit template' do
         patch transaction_path(transaction), params: invalid_update_params
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to include("prohibited this transaction from being saved")
+        expect(response.body).to include('prohibited this transaction from being saved')
       end
     end
   end
 
-  describe "DELETE /destroy" do
-    it "deletes the transaction and redirects to index" do
+  describe 'DELETE /destroy' do
+    it 'deletes the transaction and redirects to index' do
       transaction # Ensure transaction exists before deletion
-      expect {
+      expect do
         delete transaction_path(transaction)
-      }.to change(Transaction, :count).by(-1)
+      end.to change(Transaction, :count).by(-1)
 
       expect(response).to redirect_to(transactions_path)
       follow_redirect!
     end
   end
 
-  describe "GET /summary" do
-    it "renders the summary page successfully" do
+  describe 'GET /summary' do
+    it 'renders the summary page successfully' do
       get summary_transactions_path
       expect(response).to have_http_status(:ok)
     end
   end
 end
-

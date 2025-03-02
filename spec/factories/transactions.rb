@@ -23,7 +23,7 @@
 FactoryBot.define do
   factory :transaction do
     user
-    customer 
-    amount { Faker::Number.between(from: 1, to: 10000) }
+    customer
+    amount { Faker::Number.between(from: 1, to: 10_000) }
   end
 end

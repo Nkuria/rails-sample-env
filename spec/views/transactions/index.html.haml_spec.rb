@@ -5,9 +5,9 @@ RSpec.describe 'transactions/index', type: :view do
     @user = create(:user, name: 'John Doe')
     @customer = create(:customer, name: 'Acme Corp')
     @transactions = assign(:transactions, [
-      create(:transaction, user: @user, customer: @customer, amount: 1000),
-      create(:transaction, user: @user, customer: @customer, amount: 2000)
-    ])
+                             create(:transaction, user: @user, customer: @customer, amount: 1000),
+                             create(:transaction, user: @user, customer: @customer, amount: 2000)
+                           ])
     assign(:q, Transaction.ransack)
     assign(:pagy, Pagy.new(count: 2, page: 1))
   end
@@ -16,7 +16,7 @@ RSpec.describe 'transactions/index', type: :view do
     render
 
     assert_select 'h5.card-title', text: 'Listing Transactions'
-    
+
     assert_select 'table.table' do
       assert_select 'thead tr' do
         assert_select 'th', text: 'User'

@@ -4,16 +4,16 @@ RSpec.describe 'items/index', type: :view do
   before(:each) do
     company = create(:company)
     assign(:items, [
-      Item.create!(name: 'Item 1', vat: 10, company: company),
-      Item.create!(name: 'Item 2', vat: 15, company: company)
-    ])
+             Item.create!(name: 'Item 1', vat: 10, company: company),
+             Item.create!(name: 'Item 2', vat: 15, company: company)
+           ])
   end
 
   it 'renders the items table with correct headers' do
     render
 
     assert_select 'h1.text-center.fw-bold.mb-4.text-primary', text: 'Listing Items'
-    
+
     assert_select 'table.table.table-striped.table-hover.shadow-sm' do
       assert_select 'thead.thead-light' do
         assert_select 'tr' do
