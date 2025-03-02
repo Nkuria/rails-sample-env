@@ -12,120 +12,114 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/transactions", type: :request do
-  
-  # This should return the minimal set of attributes required to create a valid
-  # Transaction. As you add validations to Transaction, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+RSpec.describe "/transactions", type: :request do
+  let(:user) { create(:user) }
+  let(:customer) { create(:customer) }
+  let(:transaction) { create(:transaction, user: user, customer: customer) }
 
   describe "GET /index" do
-    it "renders a successful response" do
-      Transaction.create! valid_attributes
-      get transactions_url
-      expect(response).to be_successful
+    it "renders the index page successfully" do
+      get transactions_path
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "renders CSV format" do
+      get transactions_path(format: :csv)
+      expect(response).to have_http_status(:ok)
+      expect(response.headers['Content-Type']).to include('text/csv')
     end
   end
 
   describe "GET /show" do
-    it "renders a successful response" do
-      transaction = Transaction.create! valid_attributes
-      get transaction_url(transaction)
-      expect(response).to be_successful
+    it "renders the show page successfully" do
+      get transaction_path(transaction)
+      expect(response).to have_http_status(:ok)
     end
   end
 
   describe "GET /new" do
-    it "renders a successful response" do
-      get new_transaction_url
-      expect(response).to be_successful
+    it "renders the new page successfully" do
+      get new_transaction_path
+      expect(response).to have_http_status(:ok)
     end
   end
 
   describe "GET /edit" do
-    it "renders a successful response" do
-      transaction = Transaction.create! valid_attributes
-      get edit_transaction_url(transaction)
-      expect(response).to be_successful
+    it "renders the edit page successfully" do
+      get edit_transaction_path(transaction)
+      expect(response).to have_http_status(:ok)
     end
   end
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new Transaction" do
-        expect {
-          post transactions_url, params: { transaction: valid_attributes }
-        }.to change(Transaction, :count).by(1)
-      end
-
-      it "redirects to the created transaction" do
-        post transactions_url, params: { transaction: valid_attributes }
-        expect(response).to redirect_to(transaction_url(Transaction.last))
+      let(:valid_params) do
+        {
+          transaction: {
+            user_id: user.id,
+            customer_id: customer.id,
+            deals_attributes: [
+              { price: 100, quantity: 2, item_id: create(:item).id }
+            ]
+          }
+        }
       end
     end
 
     context "with invalid parameters" do
-      it "does not create a new Transaction" do
-        expect {
-          post transactions_url, params: { transaction: invalid_attributes }
-        }.to change(Transaction, :count).by(0)
-      end
+      let(:invalid_params) { { transaction: { user_id: nil, customer_id: nil } } }
 
-      it "renders a successful response (i.e. to display the 'new' template)" do
-        post transactions_url, params: { transaction: invalid_attributes }
-        expect(response).to be_successful
+      it "does not create a transaction and renders new template" do
+        expect {
+          post transactions_path, params: invalid_params
+        }.not_to change(Transaction, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include("prohibited this transaction from being saved")
       end
     end
   end
 
   describe "PATCH /update" do
     context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+      let(:update_params) { { transaction: { customer_id: create(:customer).id } } }
 
-      it "updates the requested transaction" do
-        transaction = Transaction.create! valid_attributes
-        patch transaction_url(transaction), params: { transaction: new_attributes }
-        transaction.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "redirects to the transaction" do
-        transaction = Transaction.create! valid_attributes
-        patch transaction_url(transaction), params: { transaction: new_attributes }
-        transaction.reload
-        expect(response).to redirect_to(transaction_url(transaction))
+      it "updates the transaction and redirects" do
+        patch transaction_path(transaction), params: update_params
+        expect(response).to redirect_to(transaction_path(transaction))
+        follow_redirect!
       end
     end
 
     context "with invalid parameters" do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
-        transaction = Transaction.create! valid_attributes
-        patch transaction_url(transaction), params: { transaction: invalid_attributes }
-        expect(response).to be_successful
+      let(:invalid_update_params) { { transaction: { customer_id: nil } } }
+
+      it "does not update the transaction and renders edit template" do
+        patch transaction_path(transaction), params: invalid_update_params
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include("prohibited this transaction from being saved")
       end
     end
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested transaction" do
-      transaction = Transaction.create! valid_attributes
+    it "deletes the transaction and redirects to index" do
+      transaction # Ensure transaction exists before deletion
       expect {
-        delete transaction_url(transaction)
+        delete transaction_path(transaction)
       }.to change(Transaction, :count).by(-1)
-    end
 
-    it "redirects to the transactions list" do
-      transaction = Transaction.create! valid_attributes
-      delete transaction_url(transaction)
-      expect(response).to redirect_to(transactions_url)
+      expect(response).to redirect_to(transactions_path)
+      follow_redirect!
+    end
+  end
+
+  describe "GET /summary" do
+    it "renders the summary page successfully" do
+      get summary_transactions_path
+      expect(response).to have_http_status(:ok)
     end
   end
 end
+
