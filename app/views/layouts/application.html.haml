@@ -11,4 +11,11 @@
     - if current_company
       %h1= current_company.name
       %hr
+
+    - if flash[:notice]
+      .alert.alert-success.text-center= flash[:notice]
+
+    - if flash[:alert]
+      .alert.alert-danger.text-center= flash[:alert]
+  
     = yield

@@ -56,7 +56,6 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'annotate'
   gem 'bullet'
-  gem 'faker'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
@@ -85,10 +84,11 @@ gem 'jwt'
 
 gem 'bootstrap', '~> 5.0'
 
-gem "sassc-rails", "~> 2.1"
+gem 'sassc-rails', '~> 2.1'
 
+gem 'jquery-rails', '~> 4.6'
 gem 'money-rails', '~> 1.12'
-gem "jquery-rails", "~> 4.6"
 
-gem 'ransack'
+gem 'faker'
 gem 'pagy'
+gem 'ransack'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: transactions
@@ -23,35 +25,35 @@
 class Transaction < ApplicationRecord
   belongs_to :user
   belongs_to :customer
-  has_many :deals, foreign_key: "transaction_id", dependent: :destroy
+  has_many :deals, foreign_key: 'transaction_id', dependent: :destroy, inverse_of: :txn
+  has_many :items, through: :deals
 
   monetize :amount_cents, as: :amount
 
   validate :created_at_cannot_be_in_the_future
   accepts_nested_attributes_for :deals, allow_destroy: true
-  
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["amount_cents", "amount_currency", "created_at", "customer_id", "id", "updated_at", "user_id"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[amount_cents amount_currency created_at customer_id id updated_at user_id]
   end
 
   def total_vat
-    deals.sum { |x| x.vat }
+    deals.sum(&:vat)
   end
 
   # before vat
   def transaction_amount
-    deals.sum { |x| x.deal_amount }
+    deals.sum(&:deal_amount)
   end
 
   # after vat
   def total_amount
-    deals.sum { |x| x.total_price }
+    deals.sum(&:total_price)
   end
 
   private
 
   def created_at_cannot_be_in_the_future
-    errors.add(:created_at, "cannot be in the future") if created_at.present? && created_at > Time.current
+    errors.add(:created_at, 'cannot be in the future') if created_at.present? && created_at > Time.current
   end
 end

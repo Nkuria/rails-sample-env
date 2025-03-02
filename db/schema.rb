@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_03_01_183846) do
+ActiveRecord::Schema.define(version: 2025_03_02_105633) do
 
   create_table "answers", force: :cascade do |t|
     t.integer "survey_id"

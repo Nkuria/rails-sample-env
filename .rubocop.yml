@@ -26,11 +26,7 @@ Naming/VariableNumber:
   Enabled: false
 
 Metrics/BlockLength:
-  Exclude:
-    - migrate/**/*
-    - routes/*
-    - Rakefile
-    - test/factories/*
+  Enabled: false
 
 Metrics/MethodLength:
   Max: 20
