@@ -19,8 +19,8 @@
 #
 FactoryBot.define do
   factory :item do
-    name { 'MyString' }
-    vat { '9.99' }
-    company { nil }
+    name { Faker::Name.name }
+    vat { Faker::Number.between(from: 1, to: 100) }
+    company
   end
 end
