@@ -45,7 +45,7 @@
 
       / Pagination
       .d-flex.justify-content-center.mt-3
-        = pagy_bootstrap_nav(@pagy)
+        = pagy_bootstrap_nav(@pagy).html_safe
 
   .mt-3.text-center
     = link_to 'New Transaction', new_transaction_path, class: 'btn btn-success'
