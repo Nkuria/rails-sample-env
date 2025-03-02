@@ -1,0 +1,33 @@
+.row.justify-content-center.mt-4
+  .col-md-12.col-lg-10
+    .card.shadow-sm.rounded-3
+      .card-body.p-4
+        %h5.card-title.text-center.mb-4 Transaction Summary
+
+        = form_with url: summary_transactions_path, method: :get, local: true, class: "text-center mb-3" do
+          = hidden_field_tag :tax_mode, @tax_mode == "exclusive" ? "inclusive" : "exclusive"
+          - if @tax_mode == "exclusive"
+            = submit_tag "Show Tax-Inclusive", class: "btn btn-primary"
+          - else
+            = submit_tag "Show Tax-Exclusive", class: "btn btn-secondary"
+
+        .table-responsive
+          %table.table.table-bordered
+            %thead
+              %tr
+                %th Customer
+                %th Item
+                - @dates.each do |date|
+                  %th.text-center= date.strftime("%b %d")
+            
+            %tbody
+              - @summary_data.each do |customer, items|
+                %tr.bg-light
+                  %td{ colspan: @dates.size + 2 }= customer
+                
+                - items.each do |item, date_values|
+                  %tr
+                    %td
+                    %td= item
+                    - @dates.each do |date|
+                      %td.text-right= date_values[date] ? ( @tax_mode == "exclusive" ? date_values[date][:tax_exclusive] : date_values[date][:tax_inclusive] ) : 0

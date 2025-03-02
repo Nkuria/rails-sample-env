@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  resources :deals
-  resources :transactions
+  resources :transactions do
+    collection do
+      get :summary
+    end
+  end
   resources :items
   resources :companies do
     resources :answers
