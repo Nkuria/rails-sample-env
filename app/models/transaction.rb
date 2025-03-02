@@ -32,4 +32,18 @@ class Transaction < ApplicationRecord
   def self.ransackable_attributes(auth_object = nil)
     ["amount_cents", "amount_currency", "created_at", "customer_id", "id", "updated_at", "user_id"]
   end
+
+  def total_vat
+    deals.sum { |x| x.vat }
+  end
+
+  # before vat
+  def transaction_amount
+    deals.sum { |x| x.deal_amount }
+  end
+
+  # after vat
+  def total_amount
+    deals.sum { |x| x.total_price }
+  end
 end

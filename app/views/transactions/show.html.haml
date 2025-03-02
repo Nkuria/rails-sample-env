@@ -1,15 +1,57 @@
-%p#notice= notice
+.row.justify-content-center.mt-4
+  .col-md-10
+    .card.shadow-sm.rounded-3
+      .card-body.p-5
+        %h5.card-title.text-center.mb-4 Transaction Details
 
-%p
-  %b User:
-  = @transaction.user
-%p
-  %b Customer:
-  = @transaction.customer
-%p
-  %b Amount:
-  = @transaction.amount
+        .row.mb-3
+          .col-md-6
+            %p
+              %b User:
+              = @transaction.user.name
+          .col-md-6
+            %p
+              %b Customer:
+              = @transaction.customer.name
 
-= link_to 'Edit', edit_transaction_path(@transaction)
-\|
-= link_to 'Back', transactions_path
+        .row.mb-3
+          .col-md-6
+            %p
+              %b Amount:
+              = @transaction.total_amount
+
+        %h5.mt-4 Deals
+        %table.table.table-bordered
+          %thead
+            %tr
+              %th Item
+              %th Price
+              %th Quantity
+              %th Subtotal
+              %th vat_rate
+              %th vat_amount
+              %th total
+          %tbody
+            - @transaction.deals.each do |deal|
+              %tr
+                %td= deal.item.name
+                %td= deal.price
+                %td= deal.quantity
+                %td= (deal.price * deal.quantity)
+                %td= deal.item.vat
+                %td= deal.vat
+                %td= deal.total_price
+          %tfoot
+            %tr
+              %th.text-right{ colspan: 6 } Total Before VAT:
+              %td= @transaction.transaction_amount
+            %tr
+              %th.text-right{ colspan: 6 } VAT:
+              %td= @transaction.total_vat
+            %tr
+              %th.text-right{ colspan: 6 } Total Amount:
+              %td= @transaction.total_amount
+
+    .mt-3.text-center
+      = link_to 'Edit', edit_transaction_path(@transaction), class: 'btn btn-primary'
+      = link_to 'Back', transactions_path, class: 'btn btn-outline-secondary'

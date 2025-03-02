@@ -26,4 +26,18 @@ class Deal < ApplicationRecord
   belongs_to :item
 
   monetize :price_cents, as: :price
+
+  # before vat
+  def deal_amount
+    quantity * price
+  end
+
+  def vat
+    deal_amount * item.vat / 100
+  end
+
+  # after vat
+  def total_price
+    vat + deal_amount
+  end
 end
