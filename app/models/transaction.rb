@@ -24,6 +24,7 @@ class Transaction < ApplicationRecord
   belongs_to :user
   belongs_to :customer
   has_many :deals, foreign_key: "transaction_id", dependent: :destroy
+  has_many :items, through: :deals
 
   monetize :amount_cents, as: :amount
 
