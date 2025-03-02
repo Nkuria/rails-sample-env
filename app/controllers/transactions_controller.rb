@@ -60,6 +60,36 @@ class TransactionsController < ApplicationController
     end
   end
 
+  def summary
+    @transactions = Transaction.includes(:customer, deals: :item).order(created_at: :desc)
+  
+    # Hash structure: { customer_name => { item_name => { date => { tax_exclusive, tax_inclusive } } } }
+    @summary_data = @transactions.each_with_object({}) do |transaction, summary|
+      customer_name = transaction.customer.name
+      summary[customer_name] ||= {}
+  
+      transaction.deals.each do |deal|
+        item_name = deal.item.name
+        summary[customer_name][item_name] ||= {}
+  
+        date = transaction.created_at.to_date
+        summary[customer_name][item_name][date] ||= { tax_exclusive: 0, tax_inclusive: 0 }
+  
+        amount = deal.price_cents * deal.quantity / 100.0
+        summary[customer_name][item_name][date][:tax_exclusive] += amount
+        summary[customer_name][item_name][date][:tax_inclusive] += amount * 1.16
+      end
+    end
+  
+    @dates = @transactions.map { |t| t.created_at.to_date }.uniq.sort
+    @tax_mode = params[:tax_mode] || "exclusive"
+  end
+  
+  
+  
+  
+  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_transaction
