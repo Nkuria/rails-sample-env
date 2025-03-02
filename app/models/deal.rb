@@ -27,6 +27,8 @@ class Deal < ApplicationRecord
 
   monetize :price_cents, as: :price
 
+  validates :quantity, numericality: { greater_than_or_equal_to: 1 }
+
   # before vat
   def deal_amount
     quantity * price
