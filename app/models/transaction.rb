@@ -27,7 +27,9 @@ class Transaction < ApplicationRecord
 
   monetize :amount_cents, as: :amount
 
+  validate :created_at_cannot_be_in_the_future
   accepts_nested_attributes_for :deals, allow_destroy: true
+  
 
   def self.ransackable_attributes(auth_object = nil)
     ["amount_cents", "amount_currency", "created_at", "customer_id", "id", "updated_at", "user_id"]
@@ -45,5 +47,11 @@ class Transaction < ApplicationRecord
   # after vat
   def total_amount
     deals.sum { |x| x.total_price }
+  end
+
+  private
+
+  def created_at_cannot_be_in_the_future
+    errors.add(:created_at, "cannot be in the future") if created_at.present? && created_at > Time.current
   end
 end
