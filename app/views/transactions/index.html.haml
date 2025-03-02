@@ -49,3 +49,7 @@
 
   .mt-3.text-center
     = link_to 'New Transaction', new_transaction_path, class: 'btn btn-success'
+
+  .row.mb-3
+    .col.text-end
+      = link_to "Export CSV", transactions_path(format: :csv), class: "btn btn-outline-success"
